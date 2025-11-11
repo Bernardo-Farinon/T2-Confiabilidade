@@ -22,7 +22,7 @@
 
 `include "RS5_pkg.sv"
 
-module execute
+module execute_C
     import RS5_pkg::*;
 #(
     parameter environment_e Environment = ASIC,
