@@ -1,8 +1,8 @@
 No geral foram adicionados os seguintes arquivos
-    ..app/soma/
-    ..rtl/arbiter.sv
-    ..sim/tb_arbiter.sv
-    ..sim/sim_ex.do
+        ../app/soma/
+        ../rtl/arbiter.sv
+        ../sim/tb_arbiter.sv
+        ../sim/sim_ex.do
 
 E alterado o arquivo ..rtl/RS5.sv
 
