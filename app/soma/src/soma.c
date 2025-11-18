@@ -1,14 +1,11 @@
-#include <stdio.h>
+#include <stdint.h>
 
-int main() {
+volatile uint32_t resultado_soma = 0;
 
-    printf("Iniciando teste...\n");
-
-    int a = 10;
-    int b = 20;
-    int c = a + b;
-
-    printf("Resultado: %d\n", c);
-
+int main (void) {
+    for (uint32_t i = 0; i <= 5000; i++) {
+        resultado_soma += i;
+    }
+    while (1);
     return 0;
 }
