@@ -61,7 +61,12 @@ module RS5
     output logic [31:0]             result_B_o,
     output logic [31:0]             result_C_o,
 
-    output logic [31:0]             result_voted_o
+    output logic [31:0]             result_voted_o,
+
+    output logic                    fault_A_o,
+    output logic                    fault_B_o,
+    output logic                    fault_C_o,
+    output logic                    system_fault_o
 );
 
 //////////////////////////////////////////////////////////////////////////////
@@ -566,10 +571,10 @@ module RS5
         .write_enable(write_enable_exec),
         .rd(rd_retire),
 
-        .fault_A(),  
-        .fault_B(),
-        .fault_C(),
-        .system_fault()
+        .fault_A(fault_A_o),  
+        .fault_B(fault_B_o),
+        .fault_C(fault_C_o),
+        .system_fault(system_fault_o)
     );
 
     

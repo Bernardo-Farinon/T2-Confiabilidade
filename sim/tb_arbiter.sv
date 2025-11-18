@@ -1,6 +1,6 @@
 `include "../rtl/RS5_pkg.sv"
 
-module tb_RS5_redundancia
+module tb_arbiter
     import RS5_pkg::*;
 ();
 
@@ -40,6 +40,11 @@ module tb_RS5_redundancia
     logic [31:0] voted_result;
 
     logic [31:0] instruction_address;
+
+    integer fail_A = 0;
+    integer fail_B = 0;
+    integer fail_C = 0;
+    integer fail_system = 0;
 
     //////////////////////////////////////
     // RS5 INSTANCE
@@ -96,8 +101,14 @@ module tb_RS5_redundancia
     //////////////////////////////////////
     always @(posedge clk) begin
         if (reset_n) begin
-            $display("T=%0t | A=%h | B=%h | C=%h | => Votado=%h",
-                      $time, outA, outB, outC, voted_result);
+            if (dut.fault_A_o) fail_A++;
+            if (dut.fault_B_o) fail_B++;
+            if (dut.fault_C_o) fail_C++;
+            if (dut.system_fault_o) fail_system++;
+
+            $display("T=%0t | A=%h | B=%h | C=%h | Votado=%h | FA=%b FB=%b FC=%b",
+                    $time, outA, outB, outC, voted_result,
+                    dut.fault_A_o, dut.fault_B_o, dut.fault_C_o);
         end
     end
 

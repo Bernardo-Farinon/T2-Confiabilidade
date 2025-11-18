@@ -141,6 +141,8 @@ module execute_C
     logic           greater_equal;
     logic           greater_equal_unsigned;
 
+    logic [31:0]    tmr_sum;
+
     always_comb begin
         unique case (instruction_operation_i)
             SUB:      sum2_opA = first_operand_i;
@@ -185,9 +187,9 @@ module execute_C
     logic induce_error = (sum_counter % 10 == 0 && sum_counter != 0);
 
     always_comb begin
-        sum_result = first_operand_i + second_operand_i;
+        tmr_sum = first_operand_i + second_operand_i;
         if (instruction_operation_i == ADD && induce_error)
-            sum_result = sum_result ^ 32'h00000001;
+            tmr_sum = tmr_sum ^ 32'h00000001;
     end
 
 
@@ -480,7 +482,7 @@ end
             MUL,MULH,MULHU,MULHSU:  result = mul_result;
             AES32ESI, AES32ESMI:    result = aes_result;
             VECTOR, VLOAD, VSTORE:  result = vector_scalar_result;
-            default:                result = sum_result;
+            default:                result = tmr_sum;
         endcase
     end
 
