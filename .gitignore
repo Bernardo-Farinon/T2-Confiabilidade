@@ -26,10 +26,8 @@ sim/debug/**
 *.map
 *.sec
 *.axf
-*.bin
 sim/obj_dir
 *.lst
-*.bin
 *.elf
 *.jou
 *.log
