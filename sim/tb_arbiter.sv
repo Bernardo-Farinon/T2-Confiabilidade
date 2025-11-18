@@ -25,7 +25,7 @@ module tb_arbiter
     // CONSTANTES
     //////////////////////////////////////
     localparam int MEM_WIDTH = 65536;
-    localparam string BIN_FILE = "../app/berkeley_suite/test.bin"; 
+    localparam string BIN_FILE = "../app/riscv-tests/test.bin"; 
 
     //////////////////////////////////////
     // SINAIS
@@ -65,14 +65,19 @@ module tb_arbiter
         .mem_write_enable_o     (mem_write_enable),
         .mem_address_o          (mem_address),
         .mem_data_o             (mem_data_write),
-        .interrupt_ack_o        (),
+        .interrupt_ack_o        (), 
 
         .result_A_o             (outA),
         .result_B_o             (outB),
         .result_C_o             (outC),
+        .result_voted_o         (voted_result),
 
-        .result_voted_o         (voted_result)   
+        .fault_A_o              (), 
+        .fault_B_o              (),
+        .fault_C_o              (),
+        .system_fault_o         ()
     );
+
 
     //////////////////////////////////////
     // RAM_mem
@@ -118,7 +123,10 @@ module tb_arbiter
     initial begin
         #100000;
         $display("\n--- FIM ---");
+        $display("Falhas A = %0d, B = %0d, C = %0d, system = %0d",
+                fail_A, fail_B, fail_C, fail_system);
         $finish;
     end
+
 
 endmodule
