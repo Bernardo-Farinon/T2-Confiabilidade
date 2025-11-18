@@ -1,10 +1,10 @@
-No geral foram adicionados os seguintes arquivos
-        ../app/soma/
-        ../rtl/arbiter.sv
-        ../sim/tb_arbiter.sv
-        ../sim/sim_ex.do
-
-E alterado o arquivo ..rtl/RS5.sv
+        Adicionado:
+                ../app/soma/
+                ../rtl/arbiter.sv
+                ../sim/tb_arbiter.sv
+                ../sim/sim_ex.do
+        Alterado:
+                ../rtl/RS5.sv
 
 O pipeline do RS5 foi modificado para incluir três unidades de execução paralelas (Execute A, Execute B e Execute C).
 
