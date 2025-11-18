@@ -1,6 +1,6 @@
 `include "../rtl/RS5_pkg.sv"
 
-module tb_redundancia
+module tb_RS5_redundancia
     import RS5_pkg::*;
 ();
 
@@ -18,8 +18,7 @@ module tb_redundancia
     logic reset_n;
     initial begin
         reset_n = 0;
-        #100;
-        reset_n = 1;
+        #100 reset_n = 1;
     end
 
     //////////////////////////////////////
@@ -27,22 +26,20 @@ module tb_redundancia
     //////////////////////////////////////
     localparam int MEM_WIDTH = 65536;
     localparam string BIN_FILE = "../app/berkeley_suite/test.bin"; 
-`ifndef SYNTH
-    localparam bit DEBUG = 1'b0;
-`endif
 
     //////////////////////////////////////
-    // SIGNALS
+    // SINAIS
     //////////////////////////////////////
     logic [31:0] instruction;
     logic [31:0] mem_data_read;
     logic [31:0] mem_address, mem_data_write;
-
-    logic mem_operation_enable;
-    logic [3:0] mem_write_enable;
+    logic [3:0]  mem_write_enable;
+    logic        mem_operation_enable;
 
     logic [31:0] outA, outB, outC;
-    logic [31:0] arb_result;
+    logic [31:0] voted_result;
+
+    logic [31:0] instruction_address;
 
     //////////////////////////////////////
     // RS5 INSTANCE
@@ -67,27 +64,15 @@ module tb_redundancia
 
         .result_A_o             (outA),
         .result_B_o             (outB),
-        .result_C_o             (outC)
+        .result_C_o             (outC),
+
+        .result_voted_o         (voted_result)   
     );
 
     //////////////////////////////////////
-    // ARBITER
-    //////////////////////////////////////
-    arbiter arb (
-        .A(outA),
-        .B(outB),
-        .C(outC),
-        .result(arb_result)
-    );
-
-    //////////////////////////////////////
-    // RAM (PORTA A = INSTRUÇÕES) (PORTA B = DADOS)
+    // RAM_mem
     //////////////////////////////////////
     RAM_mem #(
-    `ifndef SYNTH
-        .DEBUG     (DEBUG),
-        .DEBUG_PATH("./debug/"),
-    `endif
         .MEM_WIDTH (MEM_WIDTH),
         .BIN_FILE  (BIN_FILE)
     ) RAM (
@@ -107,20 +92,21 @@ module tb_redundancia
     );
 
     //////////////////////////////////////
-    // DEBUG OUTPUT
+    // DEBUG TMR
     //////////////////////////////////////
     always @(posedge clk) begin
-        if (reset_n)
-            $display("T=%0t | A=%h  B=%h  C=%h  => Votado=%h",
-                     $time, outA, outB, outC, arb_result);
+        if (reset_n) begin
+            $display("T=%0t | A=%h | B=%h | C=%h | => Votado=%h",
+                      $time, outA, outB, outC, voted_result);
+        end
     end
 
     //////////////////////////////////////
     // STOP
     //////////////////////////////////////
     initial begin
-        #4000;
-        $display("\n--- FIM DA SIMULACAO ---");
+        #100000;
+        $display("\n--- FIM ---");
         $finish;
     end
 

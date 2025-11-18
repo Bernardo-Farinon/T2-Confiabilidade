@@ -173,6 +173,24 @@ module execute_C
         greater_equal_unsigned  = first_operand_i >= second_operand_i;
     end
 
+    logic [31:0] sum_counter = 0;
+    always_ff @(posedge clk or negedge reset_n) begin
+        if (!reset_n)
+            sum_counter <= 0;
+        else if (!stall && instruction_operation_i == ADD)
+            sum_counter <= sum_counter + 1;
+    end
+
+    // 10% de falha
+    logic induce_error = (sum_counter % 10 == 0 && sum_counter != 0);
+
+    always_comb begin
+        sum_result = first_operand_i + second_operand_i;
+        if (instruction_operation_i == ADD && induce_error)
+            sum_result = sum_result ^ 32'h00000001;
+    end
+
+
 //////////////////////////////////////////////////////////////////////////////
 // Load/Store signals
 //////////////////////////////////////////////////////////////////////////////

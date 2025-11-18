@@ -59,7 +59,9 @@ module RS5
 
     output logic [31:0]             result_A_o,
     output logic [31:0]             result_B_o,
-    output logic [31:0]             result_C_o
+    output logic [31:0]             result_C_o,
+
+    output logic [31:0]             result_voted_o
 );
 
 //////////////////////////////////////////////////////////////////////////////
@@ -545,6 +547,31 @@ module RS5
     assign result_A_o = res_A;
     assign result_B_o = res_B;
     assign result_C_o = res_C;
+
+    // arbuter
+    arbiter arb (
+        .A(res_A),
+        .B(res_B),
+        .C(res_C),
+
+        .we_A(we_A),
+        .we_B(we_B),
+        .we_C(we_C),
+
+        .rd_A(rd_A),
+        .rd_B(rd_B),
+        .rd_C(rd_C),
+
+        .result(result_exec),
+        .write_enable(write_enable_exec),
+        .rd(rd_retire),
+
+        .fault_A(),  
+        .fault_B(),
+        .fault_C(),
+        .system_fault()
+    );
+
     
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////// RETIRE //////////////////////////////////////////////////////////////////////////////////
