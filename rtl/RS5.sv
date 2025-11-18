@@ -151,7 +151,14 @@ module RS5
     logic        mret_A, mret_B, mret_C;
     logic        exc_A, exc_B, exc_C;
     exceptionCode_e exc_code_A, exc_code_B, exc_code_C;
-    
+
+    logic           csr_re_A, csr_re_B, csr_re_C;
+    logic           csr_we_A, csr_we_B, csr_we_C;
+    csrOperation_e  csr_op_A, csr_op_B, csr_op_C;
+    logic [31:0]    csr_data_A, csr_data_B, csr_data_C;
+    logic [31:0]    vtype_A, vtype_B, vtype_C;
+    logic [31:0]    vlen_A,  vlen_B,  vlen_C;
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Retire signals
@@ -553,6 +560,16 @@ module RS5
     assign result_B_o = res_B;
     assign result_C_o = res_C;
 
+    assign csr_read_enable  = csr_re_A | csr_re_B | csr_re_C;
+    assign csr_write_enable = csr_we_A | csr_we_B | csr_we_C;
+
+    assign csr_operation    = csr_op_A;
+    assign csr_data_to_write = csr_data_A;
+
+    assign vtype = vtype_A;
+    assign vlen  = vlen_A;
+
+
     // arbuter
     arbiter arb (
         .A(res_A),
@@ -576,6 +593,14 @@ module RS5
         .fault_C(fault_C_o),
         .system_fault(system_fault_o)
     );
+
+    assign result_voted_o = result_exec;
+
+    // Vindo do TMR
+    assign instruction_operation_retire = instr_op_A;     
+    assign result_retire                = result_exec;    // resultado votado
+    assign regbank_write_enable         = write_enable_exec;
+
 
     
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
