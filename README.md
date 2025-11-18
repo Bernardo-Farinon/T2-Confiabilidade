@@ -1,5 +1,10 @@
+No geral foram adicionados os seguintes arquivos
+    ..app/soma/
+    ..rtl/arbiter.sv
+    ..sim/tb_arbiter.sv
+    ..sim/sim_ex.do
 
-Ainda nao consegui rodar teste para validacao. (nao da pra ter resultados de calculo de confiabilidade dependente de resultados)
+E alterado o arquivo ..rtl/RS5.sv
 
 O pipeline do RS5 foi modificado para incluir três unidades de execução paralelas (Execute A, Execute B e Execute C).
 
